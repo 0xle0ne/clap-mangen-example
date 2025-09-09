@@ -1,6 +1,6 @@
-# Auto-generate man pages for a clap-derive-based CLI (with nested subcommands)
+# How to easily create a CLI in Rust using clap and clap_mangen
 
-Define your CLI once with `clap` derive, share it with `build.rs` via `include!`, and let `clap_mangen` emit a man page per command/subcommand into `target/man/` on every build. For the full working example, see: https://github.com/0xle0ne/clap-mangen-example
+Define your CLI once with `clap` derive, run it at runtime, and auto-generate man pages at build time with `clap_mangen`—all from the same source of truth. For the full working example, see: https://github.com/0xle0ne/clap-mangen-example
 
 <img src="./static/image.png" alt="clap_mangen logo" />
 
@@ -84,7 +84,37 @@ pub struct Cli {
 }
 ```
 
-That same `build_cli()` is used in runtime and from `build.rs`.
+## Minimal runtime: `main.rs`
+
+At runtime, you parse once and dispatch to the selected subcommand. Here's the essence from `src/main.rs`:
+
+```rust
+use clap::Parser;
+
+mod cli;
+
+fn main() {
+    let opts = cli::Cli::parse();
+    match opts.command {
+        cli::Commands::Server(s) => {
+            println!("server start on {}:{} (verbosity: {})", s.addr, s.port, s.verbose);
+        }
+        cli::Commands::Remote(r) => {
+            if r.remove {
+                println!("remote removed: {}", r.name);
+            } else if let Some(url) = r.url {
+                println!("remote added: {} -> {}", r.name, url);
+            } else {
+                println!("remote info requested: {}", r.name);
+            }
+        }
+        cli::Commands::Config(cfg) => match cfg.action {
+            cli::ConfigAction::Get(g) => println!("config get {} (format: {:?})", g.key, g.format),
+            cli::ConfigAction::Set(s) => println!("config set {}={} (global: {})", s.key, s.value, s.global),
+        },
+    }
+}
+```
 
 ## Sharing CLI with `build.rs`
 
@@ -111,6 +141,24 @@ clap_mangen::generate_to(&mut cmd, &out_dir)?; // writes mycli.1, mycli-config.1
 ```
 
 The build script prints a cargo:warning showing where files were written.
+
+## How the pieces fit together
+
+Single source of truth: `src/cli.rs` contains all clap derive types for your CLI. Both runtime and the build script include this file so help text and structure never drift.
+
+1) Runtime parsing (`src/main.rs`)
+    - `Cli::parse()` builds values from the command line.
+    - A simple `match` dispatches to the chosen subcommand.
+
+2) Build-time docs (`build.rs`)
+    - Includes `src/cli.rs` so it has the same `Command` layout.
+    - Calls `clap_mangen::generate_to` on the root `Command`.
+    - Recursively writes man pages for the root and every subcommand into `target/man/`.
+
+3) Benefits
+    - No duplicate specs for help vs. docs.
+    - Man pages regenerate automatically on build when the CLI changes.
+    - Great for packaging: ship `target/man/*.1` or install them into `/usr/share/man`.
 
 ## Try it locally
 

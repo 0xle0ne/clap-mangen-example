@@ -1,6 +1,6 @@
-mod cli;
-
 use clap::Parser;
+
+mod cli;
 
 fn main() {
     let opts = cli::Cli::parse();
