@@ -5,7 +5,7 @@ use clap::{Args, Parser, Subcommand, ValueEnum};
 
 // Longer description used for the top-level man page section.
 const LONG_ABOUT: &str = r#"
-myapp is a tiny example CLI demonstrating auto-generated man pages with clap and clap_mangen.
+mycli is a tiny example CLI demonstrating auto-generated man pages with clap and clap_mangen.
 
 It showcases:
     - Nested subcommands (e.g., `config get`, `config set`)
@@ -18,10 +18,10 @@ Top-level commands:
     - remote: add or remove a remote by name
 "#;
 
-/// myapp — a tiny example CLI used to demonstrate auto-generated man pages.
+/// mycli — a tiny example CLI used to demonstrate auto-generated man pages.
 #[derive(Debug, Parser)]
 #[command(
-    name = "myapp",
+    name = "mycli",
     about = "Example CLI with nested subcommands and man page generation",
     long_about = LONG_ABOUT,
     version

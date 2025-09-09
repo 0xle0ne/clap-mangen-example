@@ -21,21 +21,37 @@ TL;DR: Define your CLI once with `clap` derive, share it with `build.rs` via `in
 
 We define the entire CLI under `src/cli.rs` using `clap` derive. Both the binary and the build script reuse these types.
 
-Key trick: to obtain the programmatic `clap::Command`, call the factory methods the derive gives you:
-
 ```rust
 // in src/cli.rs
 use clap::{Command, CommandFactory, Parser};
 
-#[derive(Debug, Parser)]
-#[command(name = "myapp", about = "Example CLI with nested subcommands and man page generation", version)]
-pub struct Cli {
-	#[command(subcommand)]
-	pub command: Commands,
-}
+// Longer description used for the top-level man page section.
+const LONG_ABOUT: &str = r#"
+mycli is a tiny example CLI demonstrating auto-generated man pages with clap and clap_mangen.
 
-pub fn build_cli() -> Command {
-	<Cli as CommandFactory>::command()
+It showcases:
+    - Nested subcommands (e.g., `config get`, `config set`)
+    - Rich help/usage text derived from a single source of truth
+    - Build-time man page generation to `target/man/`
+
+Top-level commands:
+    - config: manage configuration values (get/set)
+    - server: run a demo server (addr/port/verbosity)
+    - remote: add or remove a remote by name
+"#;
+
+/// mycli — a tiny example CLI used to demonstrate auto-generated man pages.
+#[derive(Debug, Parser)]
+#[command(
+    name = "mycli",
+    about = "Example CLI with nested subcommands and man page generation",
+    long_about = LONG_ABOUT,
+    version
+)]
+pub struct Cli {
+    /// Top-level subcommand to execute
+    #[command(subcommand)]
+    pub command: Commands,
 }
 ```
 
@@ -62,7 +78,7 @@ let mut cmd = <cli::Cli as clap::CommandFactory>::command();
 let out_dir = manifest_dir.join("target").join("man");
 std::fs::create_dir_all(&out_dir)?;
 let mut cmd = <cli::Cli as clap::CommandFactory>::command();
-clap_mangen::generate_to(&mut cmd, &out_dir)?; // writes myapp.1, myapp-config.1, myapp-config-get.1, etc.
+clap_mangen::generate_to(&mut cmd, &out_dir)?; // writes mycli.1, mycli-config.1, mycli-config-get.1, etc.
 ```
 
 The build script prints a cargo:warning showing where files were written.
@@ -72,8 +88,8 @@ The build script prints a cargo:warning showing where files were written.
 ```bash
 cargo build
 ls target/man
-man -l target/man/myapp.1          # root command
-man -l target/man/myapp-config-get.1  # nested subcommand
+man -l target/man/mycli.1          # root command
+man -l target/man/mycli-config-get.1  # nested subcommand
 ```
 
 ## Caveats & tradeoffs
