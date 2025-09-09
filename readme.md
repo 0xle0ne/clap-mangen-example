@@ -2,6 +2,14 @@
 
 TL;DR: Define your CLI once with `clap` derive, share it with `build.rs` via `include!`, and let `clap_mangen` emit a man page per command/subcommand into `target/man/` on every build.
 
+<img src="./static/image.png" alt="clap_mangen logo" />
+
+<div style="text-align: center;">
+
+![](https://img.shields.io/badge/clap-4.4.0-blue.svg) ![](https://img.shields.io/badge/clap_mangen-0.2.5-blue.svg) ![](https://img.shields.io/badge/rust-1.70+-orange.svg)
+
+</div>
+
 ## Why this is neat
 
 - Single source of truth: the derive types drive runtime parsing and documentation.
@@ -78,4 +86,4 @@ man -l target/man/myapp-config-get.1  # nested subcommand
 
 - Package installers can place pages under `/usr/share/man/man1/`.
 - Homebrew formulae can install `target/man/*.1` during `brew install`.
-- Explore docs: `clap` and `clap_mangen` crates for advanced options.
+- Explore docs: [`clap` on docs.rs](https://docs.rs/clap) and [`clap_mangen` on docs.rs](https://docs.rs/clap_mangen) for advanced options.
