@@ -4,12 +4,6 @@ TL;DR: Define your CLI once with `clap` derive, share it with `build.rs` via `in
 
 <img src="./static/image.png" alt="clap_mangen logo" />
 
-<div style="text-align: center;">
-
-![](https://img.shields.io/badge/clap-4.4.0-blue.svg) ![](https://img.shields.io/badge/clap_mangen-0.2.5-blue.svg) ![](https://img.shields.io/badge/rust-1.70+-orange.svg)
-
-</div>
-
 ## Why this is neat
 
 - Single source of truth: the derive types drive runtime parsing and documentation.
