@@ -1,8 +1,35 @@
 # Auto-generate man pages for a clap-derive-based CLI (with nested subcommands)
 
-Define your CLI once with `clap` derive, share it with `build.rs` via `include!`, and let `clap_mangen` emit a man page per command/subcommand into `target/man/` on every build.
+Define your CLI once with `clap` derive, share it with `build.rs` via `include!`, and let `clap_mangen` emit a man page per command/subcommand into `target/man/` on every build. For the full working example, see: https://github.com/0xle0ne/clap-mangen-example
 
 <img src="./static/image.png" alt="clap_mangen logo" />
+
+## Quick setup
+
+Install dependencies first, then you’re ready to follow along:
+
+```sh
+cargo add clap --features derive
+cargo add clap --build --features derive
+cargo add clap_mangen --build
+```
+
+This yields a `Cargo.toml` like:
+
+```toml
+[package]
+name = "mycli"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+
+[build-dependencies]
+clap = { version = "4", features = ["derive"] }
+clap_mangen = "0.2"
+```
 
 ## Why this is neat
 
