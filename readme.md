@@ -4,6 +4,14 @@ Define your CLI once with `clap` derive, share it with `build.rs` via `include!`
 
 <img src="./static/image.png" alt="clap_mangen logo" />
 
+## What’s a “man page” and why care?
+
+"man" stands for manual. On Unix-like systems, `man <topic>` opens documentation in your terminal (e.g., `man ls`). Shipping man pages with your CLI means:
+
+- Built-in help offline: users can read docs without internet.
+- Consistent UX: `mycli`, `mycli --help`, and `man mycli` all tell the same story.
+- Easy discovery: `man -k mycli` (apropos) lets users find related commands.
+
 ## Quick setup
 
 Install dependencies first, then you’re ready to follow along:
