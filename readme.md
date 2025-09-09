@@ -1,6 +1,6 @@
 # Auto-generate man pages for a clap-derive-based CLI (with nested subcommands)
 
-TL;DR: Define your CLI once with `clap` derive, share it with `build.rs` via `include!`, and let `clap_mangen` emit a man page per command/subcommand into `target/man/` on every build.
+Define your CLI once with `clap` derive, share it with `build.rs` via `include!`, and let `clap_mangen` emit a man page per command/subcommand into `target/man/` on every build.
 
 <img src="./static/image.png" alt="clap_mangen logo" />
 
