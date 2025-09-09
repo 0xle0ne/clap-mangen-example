@@ -4,7 +4,7 @@ Define your CLI once with `clap` derive, run it at runtime, and auto-generate ma
 
 <img src="./static/image.png" alt="clap_mangen logo" />
 
-## What’s a “man page” and why care?
+## What's a "man page" and why care?
 
 "man" stands for manual. On Unix-like systems, `man <topic>` opens documentation in your terminal (e.g., `man ls`). Shipping man pages with your CLI means:
 
@@ -14,7 +14,7 @@ Define your CLI once with `clap` derive, run it at runtime, and auto-generate ma
 
 ## Quick setup
 
-Install dependencies first, then you’re ready to follow along:
+Install dependencies first, then you're ready to follow along:
 
 ```sh
 cargo add clap --features derive
